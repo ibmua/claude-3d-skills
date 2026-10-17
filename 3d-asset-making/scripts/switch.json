@@ -1,0 +1,34 @@
+{
+ "about": "The ONE place for game-version switch distances: put your game's numbers here, read from its code, never from memory. Every toolkit script reads it through _kit.switch(family): simplify.py (error target), render.py lodcmp --at-switch / versions (--family), uvpack.py --band, asset_record.py --switch-family, mesh_integrity.py --seen-to. A version is shown from its switch-in distance (near: near_m; mid: near_mid[0] - hysteresis; far: mid_far[0] - hysteresis) and must stay within camera.px pixels of the original there (1 px = distance * 2 * tan(fov/2) / rows). A family may name a default 'slots' file (material roles, see _kit.py) and a 'contract' page; without them versions keep no named slots unless lods_all.py gets --slots.",
+ "camera": {
+  "fov_deg": 40,
+  "rows": 1080,
+  "px": 2,
+  "near_m": 0.5,
+  "near_source": "example: a PerspectiveCamera(40, 16/9, 0.5, 6000) with a 24-bit depth buffer. Depth step at distance z = z^2/(near_m * 2^24): 1.2 mm at 100 m, 7.3 mm at 248 m, 63 mm at 728 m. mesh_integrity.py --seen-to reads it."
+ },
+ "default_family": "city-kit",
+ "families": {
+  "train": {
+   "near_mid": [100, 240],
+   "mid_far": [300, 720],
+   "hysteresis": 8,
+   "near_m": 7.5,
+   "source": "example family for vehicles: near/mid switch 100 m (240 m on high graphics), mid/far 300 m (720 m), hysteresis 8 m, closest view 7.5 m"
+  },
+  "building": {
+   "near_mid": [100, 240],
+   "mid_far": [300, 720],
+   "hysteresis": 8,
+   "near_m": 7.5,
+   "source": "example family for buildings: same ranges as vehicles"
+  },
+  "city-kit": {
+   "near_mid": [24, 24],
+   "mid_far": [70, 70],
+   "hysteresis": 6,
+   "near_m": 7.5,
+   "source": "example family for small street props: 24 m and 70 m, hysteresis 6 m"
+  }
+ }
+}

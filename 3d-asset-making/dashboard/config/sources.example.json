@@ -1,0 +1,12 @@
+{
+  "_doc": "Asset folders the dashboard shows. start.sh copies it to sources.json with each root set to $ASSETS (default ~/3d-assets); edit root at your own folders. host \"local\" = this machine; a remote host needs a host_map entry (local_prefix of its mount, remote_prefix, ssh alias, blender, cache).",
+  "host_map": {},
+  "sources": [
+    {"id": "my-glbs", "label": "My GLB assets", "project": "my-game", "host": "local", "emoji": "🧊",
+     "root": "__ASSETS__", "glb": "*.glb", "folder": "My game", "navLabel": "Models"},
+    {"id": "my-blends", "label": "My .blend files", "project": "my-game", "host": "local", "emoji": "🎨",
+     "root": "__ASSETS__", "blend": "*.blend", "folder": "My game", "navLabel": "Blender files"}
+  ],
+  "runs": [],
+  "todo": []
+}

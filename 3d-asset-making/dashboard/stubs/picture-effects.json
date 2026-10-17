@@ -1,0 +1,458 @@
+{
+ "schema": "picture-effects.v1",
+ "about": "Viewer picture effects (stand-in for a game's own list; point web/vite.config.ts GAME_EFFECTS at yours).",
+ "effects": [
+  {
+   "key": "ao",
+   "label": "Shading",
+   "name": "Shading, ambient occlusion",
+   "icon": "◍",
+   "kind": "toggle",
+   "options": [
+    {
+     "id": "off",
+     "glyph": "○",
+     "label": "Off"
+    },
+    {
+     "id": "on",
+     "glyph": "●",
+     "label": "On"
+    }
+   ],
+   "autoByLevel": [
+    "off",
+    "off",
+    "off",
+    "off",
+    "off"
+   ],
+   "needsComposer": true,
+   "cost": {
+    "against": "all Auto at the device level then in use",
+    "perOption": {
+     "on": {
+      "day": {
+       "renderMs": 0.98,
+       "drawCalls": 4
+      },
+      "dusk": {
+       "renderMs": 2.29,
+       "drawCalls": 4
+      }
+     }
+    }
+   },
+   "label_long": "Ambient occlusion",
+   "game": {
+    "standard": "off",
+    "low": "off"
+   },
+   "viewer": true,
+   "how": "three r186 GTAOPass on the composer's own depth (normals reconstructed from depth: no second scene render), Poisson denoise, blended before tone mapping",
+   "viewerHow": "three GTAOPass, radius 10% of the model's half-diagonal, scale 1.8, 16 samples, clipped to its bounds",
+   "viewerCost": {
+    "draws": "+7 per frame (4 -> 11 on cab-near)",
+    "ms": "not separable from noise on an RTX 3090 shared with a Blender bake (frames 0.2-3.3 ms either way)"
+   }
+  },
+  {
+   "key": "contactShadow",
+   "label": "Contact",
+   "name": "Contact, contact shadows",
+   "icon": "▟",
+   "kind": "toggle",
+   "options": [
+    {
+     "id": "off",
+     "glyph": "○",
+     "label": "Off"
+    },
+    {
+     "id": "on",
+     "glyph": "●",
+     "label": "On"
+    }
+   ],
+   "autoByLevel": [
+    "off",
+    "off",
+    "off",
+    "off",
+    "off"
+   ],
+   "needsComposer": true,
+   "cost": {
+    "against": "all Auto at the device level then in use",
+    "perOption": {
+     "on": {
+      "day": {
+       "renderMs": -0.65,
+       "drawCalls": 1
+      },
+      "dusk": {
+       "renderMs": 0.75,
+       "drawCalls": 1
+      }
+     }
+    }
+   },
+   "label_long": "Contact shadows",
+   "game": {
+    "standard": "off",
+    "low": "off"
+   },
+   "viewer": true,
+   "how": "screen-space contact shadows: 12 depth samples per pixel marched toward the sun over at most 2.5 m, faded out by 160 m and by the sun's strength",
+   "viewerHow": "three example webgl_shadow_contact: depth from below, blurred twice, on a ground plane; redrawn only when the model changes",
+   "viewerCost": {
+    "draws": "+1 per frame (the shadow plane); +3 passes only when the model changes",
+    "ms": "within noise"
+   }
+  },
+  {
+   "key": "sunShadow",
+   "label": "Shadows",
+   "name": "Shadows, sun shadows",
+   "icon": "☀",
+   "kind": "choice",
+   "options": [
+    {
+     "id": "off",
+     "glyph": "○",
+     "label": "Off",
+     "viewerValue": 0
+    },
+    {
+     "id": "cached",
+     "glyph": "◐",
+     "label": "Still (drawn once, not every frame)",
+     "viewerValue": 2048
+    },
+    {
+     "id": "live",
+     "glyph": "●",
+     "label": "Live (every frame)",
+     "viewerValue": 2048
+    }
+   ],
+   "autoByLevel": [
+    "off",
+    "off",
+    "cached",
+    "cached",
+    "live"
+   ],
+   "needsComposer": false,
+   "cost": {
+    "against": "all Auto at the device level then in use",
+    "perOption": {
+     "off": {
+      "day": {
+       "renderMs": -2.99,
+       "drawCalls": -96
+      },
+      "dusk": {
+       "renderMs": -2.01,
+       "drawCalls": -250
+      }
+     },
+     "cached": {
+      "day": {
+       "renderMs": -2.5,
+       "drawCalls": -96
+      },
+      "dusk": {
+       "renderMs": -2.58,
+       "drawCalls": -250
+      }
+     },
+     "live": {
+      "day": {
+       "renderMs": -1.76,
+       "drawCalls": 0
+      },
+      "dusk": {
+       "renderMs": -0.16,
+       "drawCalls": 0
+      }
+     }
+    }
+   },
+   "label_long": "Sun shadows",
+   "game": {
+    "standard": "live",
+    "low": "off"
+   },
+   "viewer": 0,
+   "viewerOptions": [
+    0,
+    1024
+   ],
+   "viewerOptionList": [
+    {
+     "value": 0,
+     "label": "Off"
+    },
+    {
+     "value": 1024,
+     "label": "1024"
+    },
+    {
+     "value": 2048,
+     "label": "2048"
+    }
+   ],
+   "how": "renderer.shadowMap.enabled / autoUpdate, as the a design decision level sets them",
+   "viewerHow": "the directional light's shadow map (game: PCF, bias -0.0005, normalBias 0.06; viewer look: PCF soft, floor only)",
+   "viewerCost": {
+    "draws": "+1 per shadow-casting mesh (cab-near game look 6 vs 4; a 2170-mesh original would roughly double)",
+    "ms": "within noise on cab-near"
+   }
+  },
+  {
+   "key": "bloom",
+   "label": "Glow",
+   "name": "Glow, bloom of screens, lamps and signs",
+   "icon": "✺",
+   "kind": "toggle",
+   "options": [
+    {
+     "id": "off",
+     "glyph": "○",
+     "label": "Off"
+    },
+    {
+     "id": "on",
+     "glyph": "●",
+     "label": "On"
+    }
+   ],
+   "autoByLevel": [
+    "off",
+    "off",
+    "off",
+    "off",
+    "off"
+   ],
+   "params": {
+    "threshold": 1.6,
+    "strength": 0.4,
+    "radius": 0.35
+   },
+   "needsComposer": true,
+   "cost": {
+    "against": "all Auto at the device level then in use",
+    "perOption": {
+     "on": {
+      "day": {
+       "renderMs": -0.7,
+       "drawCalls": 14
+      },
+      "dusk": {
+       "renderMs": 0.21,
+       "drawCalls": 14
+      }
+     }
+    }
+   },
+   "label_long": "Glow",
+   "game": {
+    "standard": "off",
+    "low": "off"
+   },
+   "viewer": false,
+   "how": "three r186 UnrealBloomPass on the linear HDR picture before tone mapping; threshold above 1 so lit facades do not glow, only emissive lamps, windows and signs",
+   "viewerHow": "three UnrealBloomPass with this entry's params (as the game), fed by a separate emissive-only render (emissive colour x intensity x map, everything else black); a part with a live surface program renders its program's emission there, never its baked fallback map (2026-10-13 18:42: the still frame bloomed over the live TV as a double image)",
+   "viewerCost": {
+    "draws": "+18 per frame on cab-near (4 -> 22), +20 on the road junction (6 -> 26): emissive render + blur mips",
+    "ms": "within noise"
+   }
+  },
+  {
+   "key": "aa",
+   "label": "Smoothing",
+   "name": "Smoothing, anti-aliasing",
+   "icon": "◢",
+   "kind": "choice",
+   "options": [
+    {
+     "id": "off",
+     "glyph": "○",
+     "label": "Off"
+    },
+    {
+     "id": "msaa",
+     "glyph": "●",
+     "label": "MSAA (4 samples)",
+     "viewerValue": "msaa"
+    },
+    {
+     "id": "smaa",
+     "glyph": "◆",
+     "label": "SMAA pass"
+    }
+   ],
+   "autoByLevel": [
+    "msaa",
+    "msaa",
+    "msaa",
+    "msaa",
+    "msaa"
+   ],
+   "needsComposer": "smaa",
+   "cost": {
+    "against": "all Auto at the device level then in use",
+    "perOption": {
+     "smaa": {
+      "day": {
+       "renderMs": -1.62,
+       "drawCalls": 3
+      },
+      "dusk": {
+       "renderMs": 0.87,
+       "drawCalls": 3
+      }
+     }
+    }
+   },
+   "label_long": "Anti-aliasing",
+   "game": {
+    "standard": "msaa",
+    "low": "msaa"
+   },
+   "viewer": "refine",
+   "viewerOptionList": [
+    {
+     "value": "msaa",
+     "label": "MSAA"
+    },
+    {
+     "value": "refine",
+     "label": "MSAA + refine at rest"
+    }
+   ],
+   "how": "msaa: the canvas's own antialias (no composer) or a 4-sample composer target; off/msaa without a composer change the WebGL context, so they apply at the next start (badge ↻); smaa: three r186 SMAAPass after the output pass",
+   "viewerHow": "MSAA from the context; refine = 32 Halton-jittered frames averaged when the camera stops, then rendering stops (Materials/Clay views)",
+   "viewerCost": {
+    "draws": "msaa: 0; refine: 0 while moving, +3 per frame for 32 frames at rest, then 0",
+    "ms": "refine: about 0.5 s of work after each stop"
+   }
+  },
+  {
+   "key": "resolution",
+   "label": "Sharpness",
+   "name": "Sharpness, render resolution",
+   "icon": "▦",
+   "kind": "choice",
+   "options": [
+    {
+     "id": "0.5",
+     "scale": 0.5,
+     "glyph": "▂",
+     "label": "Half"
+    },
+    {
+     "id": "0.75",
+     "scale": 0.75,
+     "glyph": "▄",
+     "label": "Three quarters"
+    },
+    {
+     "id": "1",
+     "scale": 1,
+     "glyph": "▆",
+     "label": "Full (the screen's own, at most ×2)"
+    },
+    {
+     "id": "1.5",
+     "scale": 1.5,
+     "glyph": "█",
+     "label": "Supersampled ×1.5 (at most ×3)"
+    }
+   ],
+   "autoByLevel": [
+    "0.85",
+    "1",
+    "1",
+    "1",
+    "1"
+   ],
+   "autoNote": "scale of the device's pixel ratio capped at QUALITY.maxPixelRatio; level 0 uses 0.85 except in the map view (a design decision)",
+   "needsComposer": false,
+   "cost": {
+    "against": "all Auto at the device level then in use",
+    "perOption": {
+     "0.5": {
+      "day": {
+       "renderMs": -1.88,
+       "drawCalls": -1
+      },
+      "dusk": {
+       "renderMs": -0.43,
+       "drawCalls": -1
+      }
+     },
+     "0.75": {
+      "day": {
+       "renderMs": -1.18,
+       "drawCalls": -1
+      },
+      "dusk": {
+       "renderMs": -0.29,
+       "drawCalls": -1
+      }
+     },
+     "1.5": {
+      "day": {
+       "renderMs": 0.02,
+       "drawCalls": 0
+      },
+      "dusk": {
+       "renderMs": 1.38,
+       "drawCalls": 0
+      }
+     }
+    }
+   },
+   "label_long": "Render resolution",
+   "game": {
+    "standard": "1",
+    "low": "1"
+   },
+   "viewer": 1.5,
+   "viewerOptionList": [
+    {
+     "value": 1,
+     "label": "1×"
+    },
+    {
+     "value": 1.5,
+     "label": "1.5×"
+    },
+    {
+     "value": 2,
+     "label": "2×"
+    }
+   ],
+   "how": "renderer.setPixelRatio(base × scale)",
+   "viewerHow": "device pixel ratio cap (game QUALITY.maxPixelRatio)",
+   "viewerCost": {
+    "draws": "0",
+    "ms": "fill rate scales with the square: 2 = 4x the pixels of 1; not measured here"
+   }
+  }
+ ],
+ "tiers": [
+  {
+   "id": "standard",
+   "label": "Standard",
+   "note": "/mechanics/ at a design decision level 4 (full detail): sun shadows live, MSAA, pixel ratio min(devicePixelRatio, 2)."
+  },
+  {
+   "id": "low",
+   "label": "Low",
+   "note": "?quality=low (perf/ScenePolicy.js): never creates a sun shadow map; MSAA; same pixel ratio. The old step-down ladder (pixel ratio 1, shadow map 1024) is off since a design decision."
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "shaderlab",
+  "private": true,
+  "description": "Prototype animated and close-up materials on three.js at the game's revision. three is pinned to the game's vendored copy (the game vendor/three, r186); change it with the project.",
+  "dependencies": { "three": "0.186.0" }
+}

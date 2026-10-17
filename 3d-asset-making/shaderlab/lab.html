@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shader Lab</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='3' width='14' height='9' rx='1.5' fill='%2340c8ff'/%3E%3Crect x='6' y='13' width='4' height='2' fill='%23888'/%3E%3C/svg%3E">
+<style>
+  :root { --bg:#16181d; --panel:#1f232b; --fg:#e6e8ec; --dim:#8a919e; --acc:#40c8ff; --err:#ff6b6b; }
+  @media (prefers-color-scheme: light) { :root { --bg:#f3f4f6; --panel:#fff; --fg:#1b1e24; --dim:#5d6470; --err:#c62828; } }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:13px/1.4 system-ui,sans-serif; }
+  #app { display:grid; grid-template-columns: 1fr 300px; height:100%; }
+  #view { position:relative; min-width:0; }
+  #view canvas { display:block; width:100%; height:100%; }
+  aside { background:var(--panel); padding:12px; overflow:auto; }
+  h1 { font-size:14px; margin:0 0 8px; }
+  .row { display:flex; gap:6px; align-items:center; margin:6px 0; flex-wrap:wrap; }
+  label { display:block; margin:8px 0 2px; color:var(--dim); }
+  input[type=range] { width:100%; }
+  button { background:transparent; color:var(--fg); border:1px solid var(--dim); border-radius:6px; padding:3px 8px; cursor:pointer; }
+  button.on { border-color:var(--acc); color:var(--acc); }
+  pre#err { color:var(--err); white-space:pre-wrap; overflow-wrap:anywhere; font-size:11px; }
+  #hud { position:absolute; left:8px; bottom:8px; color:var(--dim); font:12px monospace; }
+  @media (max-width: 700px) { #app { grid-template-columns: 1fr; grid-template-rows: 60% 40%; } }
+</style>
+<script type="importmap">{ "imports": { "three": "../three/build/three.module.js", "three/addons/": "../three/examples/jsm/" } }</script>
+</head>
+<body>
+<div id="app">
+  <div id="view"><div id="hud"></div></div>
+  <aside>
+    <h1 id="title">Shader Lab</h1>
+    <div class="row"><button id="play" class="on">⏸</button><input id="time" type="range" min="0" max="1" step="0.001" style="flex:1"></div>
+    <div class="row" id="views"></div>
+    <div class="row"><button id="bloom">✨ bloom</button><button id="look">🎮 game look</button><button id="reload">↻ reload GLSL</button></div>
+    <div id="uniforms"></div>
+    <div class="row"><button id="copy">📋 copy uniforms</button></div>
+    <pre id="err"></pre>
+  </aside>
+</div>
+<script type="module" src="./lab.js"></script>
+</body>
+</html>

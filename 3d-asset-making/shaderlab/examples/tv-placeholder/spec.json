@@ -1,0 +1,22 @@
+{
+  "title": "TV placeholder (lab self-test)",
+  "primitives": [
+    {"shape": "box", "size": [1.0, 0.6, 0.04], "position": [0, 0.5, 0], "material": "bezel", "color": "#1a1b1e", "roughness": 0.35, "metalness": 0.2},
+    {"shape": "plane", "size": [0.96, 0.56], "position": [0, 0.5, 0.0205], "material": "screen", "color": "#050608", "roughness": 0.08},
+    {"shape": "plane", "size": [1.5, 1.0], "position": [0, 0.5, -0.03], "material": "glow"},
+    {"shape": "box", "size": [0.3, 0.02, 0.15], "position": [0, 0.01, 0.02], "material": "stand", "color": "#2a2b2e", "metalness": 0.6, "roughness": 0.3}
+  ],
+  "programs": {
+    "screen": {"glsl": "screen.glsl", "uniforms": {"uOn": 1.0, "uGain": 2.2, "uTint": "#9fd8ff"}, "ranges": {"uGain": [0, 6]}},
+    "glow": {"glsl": "glow.glsl", "unlit": true, "blending": "additive", "uniforms": {"uOn": 1.0, "uStrength": 0.35, "uTint": "#7fc4ff"}}
+  },
+  "look": "game",
+  "context": "room",
+  "bloom": {"strength": 0.5, "radius": 0.5, "threshold": 1.0},
+  "views": [
+    {"name": "front", "dir": [0, 0.05, 1]},
+    {"name": "three-quarter", "dir": [0.75, 0.25, 0.8]},
+    {"name": "game", "game": {"distance": 12, "fov": 62, "heightPx": 1688, "dir": [0.3, 0.35, 1], "zoom": 6}}
+  ],
+  "clip": {"seconds": 4}
+}

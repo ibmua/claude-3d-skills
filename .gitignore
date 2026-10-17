@@ -1,0 +1,7 @@
+node_modules/
+dist/
+3d-asset-making/dashboard/cache/
+3d-asset-making/dashboard/config/sources.json
+__pycache__/
+publish.py
+_public/
